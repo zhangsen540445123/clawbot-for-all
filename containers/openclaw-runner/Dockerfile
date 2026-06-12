@@ -58,7 +58,7 @@ RUN echo "=== Step 3: Checking openclaw CLI ===" \
 RUN echo "=== Step 4: Installing plugin with openclaw plugins install ===" \
     && export OPENCLAW_HOME="${OPENCLAW_PREINSTALLED_HOME}" \
     && export OPENCLAW_CONFIG_PATH="${OPENCLAW_PREINSTALLED_HOME}/openclaw.json" \
-    && openclaw plugins install "${OPENCLAW_WECHAT_PLUGIN_SPEC}" --yes
+    && echo "y" | openclaw plugins install "${OPENCLAW_WECHAT_PLUGIN_SPEC}"
 
 RUN echo "=== Step 5: Verifying plugin installation ===" \
     && ls -la "${OPENCLAW_PREINSTALLED_HOME}/.openclaw/extensions/${OPENCLAW_WECHAT_CHANNEL_ID}"
