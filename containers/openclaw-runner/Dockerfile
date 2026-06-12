@@ -61,19 +61,26 @@ RUN echo "=== Step 4: Installing plugin with openclaw plugins install ===" \
     && echo "y" | openclaw plugins install "${OPENCLAW_WECHAT_PLUGIN_SPEC}"
 
 RUN echo "=== Step 5: Verifying plugin installation ===" \
-    && ls -la "${OPENCLAW_PREINSTALLED_HOME}/.openclaw/extensions/${OPENCLAW_WECHAT_CHANNEL_ID}"
+    && find "${OPENCLAW_PREINSTALLED_HOME}" -type d -name "*openclaw-weixin*" \
+    && echo "=== Finding actual plugin directory ===" \
+    && PLUGIN_DIR=$(find "${OPENCLAW_PREINSTALLED_HOME}" -type d -name "*openclaw-weixin*" | head -1) \
+    && echo "Found plugin at: ${PLUGIN_DIR}" \
+    && ls -la "${PLUGIN_DIR}"
 
 RUN echo "=== Step 6: Pruning dev dependencies ===" \
-    && cd "${OPENCLAW_PREINSTALLED_HOME}/.openclaw/extensions/${OPENCLAW_WECHAT_CHANNEL_ID}" \
+    && PLUGIN_DIR=$(find "${OPENCLAW_PREINSTALLED_HOME}" -type d -name "*openclaw-weixin*" | head -1) \
+    && cd "${PLUGIN_DIR}" \
     && npm prune --omit=dev
 
 RUN echo "=== Step 7: Creating symlink ===" \
-    && mkdir -p "${OPENCLAW_PREINSTALLED_HOME}/.openclaw/extensions/${OPENCLAW_WECHAT_CHANNEL_ID}/node_modules" \
+    && PLUGIN_DIR=$(find "${OPENCLAW_PREINSTALLED_HOME}" -type d -name "*openclaw-weixin*" | head -1) \
+    && mkdir -p "${PLUGIN_DIR}/node_modules" \
     && ln -sfn /usr/local/lib/node_modules/openclaw \
-       "${OPENCLAW_PREINSTALLED_HOME}/.openclaw/extensions/${OPENCLAW_WECHAT_CHANNEL_ID}/node_modules/openclaw"
+       "${PLUGIN_DIR}/node_modules/openclaw"
 
 RUN echo "=== Step 8: Final verification ===" \
-    && test -d "${OPENCLAW_PREINSTALLED_HOME}/.openclaw/extensions/${OPENCLAW_WECHAT_CHANNEL_ID}" \
+    && PLUGIN_DIR=$(find "${OPENCLAW_PREINSTALLED_HOME}" -type d -name "*openclaw-weixin*" | head -1) \
+    && test -d "${PLUGIN_DIR}" \
     && echo "=== SUCCESS: All steps completed ==="
 
 WORKDIR /workspace
