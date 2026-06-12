@@ -1,6 +1,6 @@
 FROM node:22-bookworm-slim
 
-ARG OPENCLAW_VERSION=2026.6.6
+ARG OPENCLAW_VERSION=2026.5.28
 ARG OPENCLAW_WECHAT_PLUGIN_SPEC=@tencent-weixin/openclaw-weixin@2.4.4
 
 LABEL io.clawbot.openclaw.version="${OPENCLAW_VERSION}"

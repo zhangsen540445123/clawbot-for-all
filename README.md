@@ -16,7 +16,7 @@ Multi-tenant OpenClaw control plane with per-user instances, preinstalled WeChat
 - 实例容器支持通过环境变量限制 CPU 和内存，便于单机部署多个实例
 - App / Runner 镜像通过 GitHub Actions 发布到 GHCR
 - 发布镜像支持 `linux/amd64` 与 `linux/arm64`
-- Runner 镜像默认钉死已验证组合：`openclaw@2026.6.6` + `@tencent-weixin/openclaw-weixin@2.4.4`
+- Runner 镜像默认钉死已验证组合：`openclaw@2026.5.28` + `@tencent-weixin/openclaw-weixin@2.4.4`
 
 ### English
 
@@ -28,7 +28,7 @@ Multi-tenant OpenClaw control plane with per-user instances, preinstalled WeChat
 - Per-instance container CPU and memory limits can be configured with environment variables
 - App and runner images are published to GHCR via GitHub Actions
 - Published images support both `linux/amd64` and `linux/arm64`
-- The runner image is pinned to a verified pairing: `openclaw@2026.6.6` + `@tencent-weixin/openclaw-weixin@2.4.4`
+- The runner image is pinned to a verified pairing: `openclaw@2026.5.28` + `@tencent-weixin/openclaw-weixin@2.4.4`
 
 ## 2. 如何快速 Docker 部署
 
@@ -85,7 +85,7 @@ docker logs -f clawbot-for-all
 
 - `OPENCLAW_RUNNER_CPUS`：限制每个实例容器可用 CPU，例如 `0.5`、`1.0`、`2`
 - `OPENCLAW_RUNNER_MEMORY`：限制每个实例容器内存，例如 `512m`、`1g`、`2g`
-- 当前 `latest` runner 镜像应内置已验证版本组合：`openclaw@2026.6.6` + `@tencent-weixin/openclaw-weixin@2.4.4`
+- 当前 `latest` runner 镜像应内置已验证版本组合：`openclaw@2026.5.28` + `@tencent-weixin/openclaw-weixin@2.4.4`
 - 业务数据和 server 日志保存在 `./data`
 - server 日志文件路径为 `./data/logs/server.log`
 - 应用容器必须挂载 `/var/run/docker.sock`
@@ -144,7 +144,7 @@ Notes:
 
 - `OPENCLAW_RUNNER_CPUS` limits CPU per instance container, for example `0.5`, `1.0`, or `2`
 - `OPENCLAW_RUNNER_MEMORY` limits memory per instance container, for example `512m`, `1g`, or `2g`
-- The current `latest` runner image is expected to ship with the verified pairing `openclaw@2026.6.6` + `@tencent-weixin/openclaw-weixin@2.4.4`
+- The current `latest` runner image is expected to ship with the verified pairing `openclaw@2026.5.28` + `@tencent-weixin/openclaw-weixin@2.4.4`
 - App data and server logs are stored under `./data`
 - Server log file path is `./data/logs/server.log`
 - The app container must mount `/var/run/docker.sock`
