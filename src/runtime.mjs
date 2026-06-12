@@ -7,7 +7,7 @@ import {
 } from "./utils.mjs";
 import { WECHAT_CHANNEL_ID, WECHAT_PLUGIN_SPEC } from "./wechat-plugin.mjs";
 
-const RUNNER_IMAGE = process.env.OPENCLAW_RUNNER_IMAGE || "ghcr.io/jimizhou/clawbot-openclaw-runner:latest";
+const RUNNER_IMAGE = process.env.OPENCLAW_RUNNER_IMAGE || "ghcr.io/zhangsen540445123/clawbot-openclaw-runner:latest";
 const RUNNER_PULL_TIMEOUT_MS = Number(process.env.OPENCLAW_RUNNER_PULL_TIMEOUT_MS || 10 * 60 * 1000);
 const WECHAT_BIND_TIMEOUT_MS = Number(process.env.OPENCLAW_WECHAT_BIND_TIMEOUT_MS || 10 * 60 * 1000);
 const RUNNER_IMAGE_INSPECT_TIMEOUT_MS = 15 * 1000;
