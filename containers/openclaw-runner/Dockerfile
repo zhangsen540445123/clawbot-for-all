@@ -1,6 +1,6 @@
 FROM node:22-bookworm-slim
 
-ARG OPENCLAW_VERSION=2026.5.28
+ARG OPENCLAW_VERSION=2026.6.1
 ARG OPENCLAW_WECHAT_PLUGIN_SPEC=@tencent-weixin/openclaw-weixin@2.4.4
 
 LABEL io.clawbot.openclaw.version="${OPENCLAW_VERSION}"
@@ -19,7 +19,8 @@ RUN apt-get update \
 
 RUN npm install -g "openclaw@${OPENCLAW_VERSION}"
 
-RUN mkdir -p "${OPENCLAW_PREINSTALLED_HOME}" \
+RUN echo "=== Step 1: Creating config file ===" \
+    && mkdir -p "${OPENCLAW_PREINSTALLED_HOME}" \
     && printf '%s\n' \
        '{' \
        '  "gateway": {' \
@@ -39,13 +40,37 @@ RUN mkdir -p "${OPENCLAW_PREINSTALLED_HOME}" \
        '    }' \
        '  }' \
        '}' \
-       > "${OPENCLAW_PREINSTALLED_HOME}/openclaw.json"
-
-RUN mkdir -p "${OPENCLAW_PREINSTALLED_HOME}/.openclaw/extensions/${OPENCLAW_WECHAT_CHANNEL_ID}" \
+       > "${OPENCLAW_PREINSTALLED_HOME}/openclaw.json" \
+    && echo "=== Config file created ===" \
+    && cat "${OPENCLAW_PREINSTALLED_HOME}/openclaw.json" \
+    && echo "=== Step 2: Setting environment variables ===" \
+    && export OPENCLAW_HOME="${OPENCLAW_PREINSTALLED_HOME}" \
+    && export OPENCLAW_CONFIG_PATH="${OPENCLAW_PREINSTALLED_HOME}/openclaw.json" \
+    && echo "OPENCLAW_HOME=${OPENCLAW_HOME}" \
+    && echo "OPENCLAW_CONFIG_PATH=${OPENCLAW_CONFIG_PATH}" \
+    && echo "OPENCLAW_WECHAT_PLUGIN_SPEC=${OPENCLAW_WECHAT_PLUGIN_SPEC}" \
+    && echo "=== Step 3: Checking openclaw CLI ===" \
+    && which openclaw \
+    && openclaw --version \
+    && echo "=== Step 4: Installing plugin with openclaw plugins install ===" \
+    && openclaw plugins install "${OPENCLAW_WECHAT_PLUGIN_SPEC}" --yes 2>&1 || \
+       (echo "=== ERROR: openclaw plugins install failed ===" && \
+        echo "Exit code: $?" && \
+        echo "=== Trying to get more debug info ===" && \
+        ls -la "${OPENCLAW_PREINSTALLED_HOME}" && \
+        exit 1) \
+    && echo "=== Step 5: Verifying plugin installation ===" \
+    && ls -la "${OPENCLAW_PREINSTALLED_HOME}/.openclaw/extensions/${OPENCLAW_WECHAT_CHANNEL_ID}" \
+    && echo "=== Step 6: Pruning dev dependencies ===" \
     && cd "${OPENCLAW_PREINSTALLED_HOME}/.openclaw/extensions/${OPENCLAW_WECHAT_CHANNEL_ID}" \
-    && npm install "${OPENCLAW_WECHAT_PLUGIN_SPEC}" --omit=dev \
-    && mkdir -p node_modules \
-    && ln -sfn /usr/local/lib/node_modules/openclaw node_modules/openclaw
+    && npm prune --omit=dev \
+    && echo "=== Step 7: Creating symlink ===" \
+    && mkdir -p "${OPENCLAW_PREINSTALLED_HOME}/.openclaw/extensions/${OPENCLAW_WECHAT_CHANNEL_ID}/node_modules" \
+    && ln -sfn /usr/local/lib/node_modules/openclaw \
+       "${OPENCLAW_PREINSTALLED_HOME}/.openclaw/extensions/${OPENCLAW_WECHAT_CHANNEL_ID}/node_modules/openclaw" \
+    && echo "=== Step 8: Final verification ===" \
+    && test -d "${OPENCLAW_PREINSTALLED_HOME}/.openclaw/extensions/${OPENCLAW_WECHAT_CHANNEL_ID}" \
+    && echo "=== SUCCESS: All steps completed ==="
 
 WORKDIR /workspace
 
