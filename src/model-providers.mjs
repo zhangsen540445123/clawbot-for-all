@@ -20,8 +20,8 @@ function buildModelDefinition(modelId, patch = {}) {
     reasoning: true,
     input: ["text"],
     cost: DEFAULT_COST,
-    contextWindow: 128000,
-    maxTokens: 32000,
+    contextWindow: 1000000,
+    maxTokens: 1000000,
     ...patch,
   };
 }
