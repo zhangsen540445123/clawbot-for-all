@@ -545,7 +545,7 @@ const PROVIDER_DEFINITIONS = [
         api: model.apiMode,
         ...(model.baseUrl ? { baseUrl: model.baseUrl } : {}),
         ...(model.apiKey ? { apiKey: model.apiKey } : {}),
-        models: [buildModelDefinition(model.modelId)],
+        models: [buildModelDefinition(model.modelId, { input: ["text", "image"] })],
       };
     },
   },
